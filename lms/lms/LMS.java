@@ -25,11 +25,9 @@ public class LMS {
     public boolean borrowBook(Book book, Student student) {
         boolean borrowed = false;
         // TODO must be implemented
-        // Use the existing removeBook method
         if (removeBook(book)) {
-            // If the book was successfully removed from the library
             student.borrowBook(book);
-            borrowed = true; // Mark the operation as successful
+            borrowed = true;
         }
 
         return borrowed;
