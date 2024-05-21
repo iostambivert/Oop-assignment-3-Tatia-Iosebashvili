@@ -1,4 +1,6 @@
 package lms;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Student {
@@ -12,6 +14,8 @@ public class Student {
         this.name = name;
         this.surname = surname;
         this.personalNumber = personalNumber;
+        this.borrowedBooks = new ArrayList<>();
+
     }
 
     public String getName() {
@@ -38,6 +42,6 @@ public class Student {
         this.personalNumber = personalNumber;
     }
 
-    public void borrowBook(Book book) { borrowedBooks.add(book);
+    public void addBorrowedBook(Book book) { borrowedBooks.add(book);
     }
 }

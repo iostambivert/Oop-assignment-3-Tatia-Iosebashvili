@@ -18,15 +18,17 @@ public class LMS {
         if(books != null && books.contains(book)){
             removed = books.remove(book);
         }
-
         return removed;
     }
 
     public boolean borrowBook(Book book, Student student) {
         boolean borrowed = false;
         // TODO must be implemented
-        if (removeBook(book)) {
-            student.borrowBook(book);
+        if (books.contains(book) && book.isAvailable()) {
+            book.borrow();
+
+            // Add the book to the student's list of borrowed books
+            student.addBorrowedBook(book);
             borrowed = true;
         }
 
@@ -57,7 +59,6 @@ public class LMS {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public boolean loadState(Book book, String filePath) {
@@ -84,7 +85,6 @@ public class LMS {
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-
         return returned;
     }
 
