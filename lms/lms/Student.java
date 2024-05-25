@@ -7,8 +7,7 @@ public class Student {
     String name, surname, personalNumber;
     private List<Book> borrowedBooks;
 
-    public Student() {
-    }
+
 
     public Student(String name, String surname, String personalNumber) {
         this.name = name;
