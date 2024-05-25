@@ -39,8 +39,9 @@ public class LMS {
         boolean returned = false;
         // TODO must be implemented
         if(book != null && books.contains(book) && !book.isAvailable()){
-
-
+            // add book back to the list of available books
+            books.add(book);
+            returned = true;
         }
         return returned;
     }
