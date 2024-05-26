@@ -6,19 +6,18 @@ import java.util.List;
 
 public class LMS {
 
-    List<Book> books = new ArrayList<>();
+    private List<Book> books;
+
+    public LMS(){
+        this.books = new ArrayList<>();
+    }
 
     public void addBook(Book book) {
         books.add(book);
     }
 
     public boolean removeBook(Book book) {
-        boolean removed = false;
-        // TODO must be implemented
-        if(books != null && books.contains(book)){
-            removed = books.remove(book);
-        }
-        return removed;
+        return books.remove(book);
     }
 
     public boolean borrowBook(Book book, Student student) {
@@ -37,54 +36,42 @@ public class LMS {
 
     public boolean returnBook(Book book) {
         boolean returned = false;
-        // TODO must be implemented
-        if(book != null && books.contains(book) && !book.isAvailable()){
-            // add book back to the list of available books
-            books.add(book);
+        if (book != null && books.contains(book) && !book.isAvailable()) {
+            book.available = true;
             returned = true;
         }
         return returned;
     }
 
     public void saveState(String filePath) {
-        // TODO must be implemented
-        try (FileOutputStream fileOut = new FileOutputStream(filePath);
-             ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
-
-            // Write the list of books to the file
-            out.writeObject(books);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            for (Book book : books) {
+                writer.write(book.getTitle() + "," + book.getAuthor() + "," + book.isAvailable());
+                writer.newLine();
+            }
             System.out.println("Library state saved to " + filePath);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public boolean loadState(Book book, String filePath) {
-        boolean returned = false;
-        // TODO must be implemented
-        try (FileInputStream fileIn = new FileInputStream(filePath);
-             ObjectInputStream in = new ObjectInputStream(fileIn)) {
-
-            // Read the book object from the file
-            Book loadedBook = (Book) in.readObject();
-
-            // Compare the loaded book with the provided book
-            if (loadedBook.equals(book)) {
-                // If the loaded book matches the provided book
-                // Update the state of the provided book with the loaded book
-                book.setTitle(loadedBook.getTitle());
-                book.setAuthor(loadedBook.getAuthor());
-                boolean loaded = true;
-                System.out.println("Book state loaded from " + filePath);
-            } else {
-                System.out.println("Book state not found or does not match the provided book.");
+    public void loadState(String filePath) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            books.clear(); // Clear the existing book list
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] bookData = line.split(",");
+                String title = bookData[0];
+                String author = bookData[1];
+                boolean available = Boolean.parseBoolean(bookData[2]);
+                Book book = new Book(title, author);
+                book.available = available;
+                books.add(book);
             }
-
-        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Library state loaded from " + filePath);
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        return returned;
     }
 
 }
